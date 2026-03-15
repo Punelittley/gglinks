@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGLINK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="header_footer.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #151515;
+            --accent: #0066ff;
+            --white: #ffffff;
+            --gray: #666666;
+            --danger: #ff3333;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.98);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .login-box {
+            width: 450px;
+            padding: 50px;
+            background: #050505;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .login-box h1 {
+            font-family: var(--font-head);
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            border: 1px solid var(--border);
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .login-error {
+            color: #ff3333;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            background: #030303;
+            border-right: 1px solid var(--border);
+            padding: 30px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-area {
+            padding: 0 30px 30px;
+            font-family: var(--font-head);
+            font-size: 20px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--gray);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: white;
+            background: #0a0a0a;
+        }
+
+        .nav-item.active {
+            border-left: 2px solid var(--accent);
+        }
+
+        .main-view {
+            padding: 40px;
+            overflow-x: auto;
+        }
+
+        .view-header {
+            margin-bottom: 30px;
+        }
+
+        .view-header h1 {
+            font-family: var(--font-head);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        .data-table th {
+            font-size: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #0a0a0a;
+            font-size: 13px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .badge-success {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: var(--font-head);
+            text-transform: uppercase;
+        }
+
+        .btn-sm:hover {
+            border-color: var(--accent);
+        }
+
+        .btn-danger {
+            border-color: #ff3333;
+            color: #ff3333;
+        }
+
+        .btn-danger:hover {
+            background: #ff3333;
+            color: white;
+        }
+
+        .log-entry {
+            display: flex;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #0a0a0a;
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+
+        .log-ip {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .msg-entry {
+            padding: 15px;
+            background: #050505;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .msg-entry img.msg-image {
+            max-width: clamp(200px, 50%, 500px);
+            max-height: 300px;
+            object-fit: contain;
+            border: 1px solid var(--border);
+            margin-top: 8px;
+            display: block;
+        }
+
+        textarea { resize: none; }
+
+        .mobile-admin-link {
+            display: none !important;
+            color: #ff3333 !important;
+            border: 1px solid #ff3333;
+            padding: 10px 30px;
+            font-size: 14px !important;
+        }
+
+        .mobile-admin-link.visible {
+            display: inline-block !important;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #050505;
+            border: 1px solid var(--border);
+            padding: 40px;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-box h2 {
+            font-family: var(--font-head);
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+
+        .modal-box .field-group {
+            margin-bottom: 18px;
+        }
+
+        .modal-box .field-group label {
+            display: block;
+            font-size: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .modal-box .field-group input,
+        .modal-box .field-group textarea,
+        .modal-box .field-group select {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .modal-box .field-group input:focus,
+        .modal-box .field-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .modal-box .field-group input.input-error,
+        .modal-box .field-group textarea.input-error {
+            border-color: var(--danger) !important;
+            background: rgba(255, 51, 51, 0.05) !important;
+        }
+
+        .field-error {
+            color: var(--danger);
+            font-size: 10px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .char-counter {
+            font-size: 9px;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .char-counter.warn {
+            color: #f59e0b;
+        }
+
+        .char-counter.limit {
+            color: var(--danger);
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btns button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .modal-btns .btn-save {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .modal-btns .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #fff;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-row input[type="checkbox"] {
+            width: auto;
+        }
+
+        .checkbox-row label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .admin-layout {
+                grid-template-columns: 220px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                white-space: nowrap;
+            }
+
+            .logo-area {
+                display: none;
+            }
+
+            .nav-item {
+                padding: 10px 20px;
+                white-space: nowrap;
+                font-size: 12px;
+            }
+
+            .nav-item.active {
+                border-left: none;
+                border-bottom: 2px solid var(--accent);
+            }
+
+            .main-view {
+                padding: 20px;
+            }
+
+            .view-header h1 {
+                font-size: 22px;
+            }
+
+            .data-table {
+                font-size: 11px;
+            }
+
+            .modal-box {
+                width: 90%;
+                padding: 25px;
+            }
+
+            .login-box {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .main-view {
+                padding: 15px;
+            }
+
+            .view-header h1 {
+                font-size: 18px;
+            }
+
+            .btn-sm {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .data-table td {
+                padding: 10px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo"><img src="assets/logo.svg" alt="GGLINK Logo"></a>
+                <nav class="nav-menu">
+                    <a href="brows.html">Найти тиммейта</a>
+                    <a href="games.html">Библиотека игр</a>
+                    <a href="tournament.html">Турниры</a>
+                    <a href="clans.html">Кланы</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="message.html" class="msg-icon" title="Сообщения" onclick="return checkMsgAuth(event)"><i
+                            class="fas fa-comment-dots"></i></a>
+                    <a href="admin.html" class="admin-link" id="admin-link"><i class="fas fa-shield-alt"></i> Админ</a>
+                    <a href="profile.html" class="profile-icon" id="header-profile-icon"></a>
+                    <span id="auth-buttons">
+                        <a href="auth.html"
+                            style="color:var(--gray); text-decoration:none; font-size:12px; font-weight:600; text-transform:uppercase;">Войти</a>
+                        <a href="auth.html" class="btn btn-blue" style="margin-left:10px;">Регистрация</a>
+                    </span>
+                    <button class="burger-btn" id="burger-btn" onclick="toggleMenu()"><i class="fas fa-bars"
+                            id="burger-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="brows.html">Найти тиммейта</a>
+        <a href="games.html">Библиотека игр</a>
+        <a href="tournament.html">Турниры</a>
+        <a href="clans.html">Кланы</a>
+        <a href="message.html">Сообщения</a>
+        <a href="admin.html" class="mobile-admin-link" id="mobile-admin-link"><i class="fas fa-shield-alt"></i>
+            Админ</a>
+        <div class="mobile-auth" id="mobile-auth">
+            <a href="auth.html">Войти</a>
+            <a href="auth.html" class="btn btn-blue">Регистрация</a>
+        </div>
+    </div>
+    <div class="login-overlay" id="login-screen">
+        <div class="login-box">
+            <h1>Админ <span style="color:var(--accent)">Доступ</span></h1>
+            <div class="login-error" id="login-error">Неверный email или пароль</div>
+            <input type="email" id="admin-email" placeholder="Email">
+            <input type="password" id="admin-pass" placeholder="Пароль">
+            <button onclick="adminLogin()">Войти</button>
+        </div>
+    </div>
+    <div class="admin-layout" id="admin-panel" style="display:none;">
+        <aside class="sidebar">
+            <div class="logo-area">GGLINK</div>
+            <div class="nav-item active" onclick="showSection('users', this)"><i class="fas fa-users"></i> Пользователи
+            </div>
+            <div class="nav-item" onclick="showSection('security', this)"><i class="fas fa-shield-halved"></i> Логи
+                посещений</div>
+            <div class="nav-item" onclick="showSection('content', this)"><i class="fas fa-gamepad"></i> Кланы & Турниры
+            </div>
+            <div class="nav-item" onclick="showSection('messages', this)"><i class="fas fa-comment-dots"></i> Сообщения
+            </div>
+            <div style="margin-top:auto; padding: 20px 30px;">
+                <button class="btn-sm" style="width:100%" onclick="window.location.href='index.html'">← На сайт</button>
+            </div>
+        </aside>
+        <main class="main-view">
+            <section id="users" class="section active">
+                <div class="view-header">
+                    <h1>БД ВСЕХ ПОЛЬЗОВАТЕЛЕЙ</h1>
+                    <p style="color: #444;">Полный список зарегистрированных идентификаторов</p>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Ник</th>
+                                <th>Email</th>
+                                <th>Discord</th>
+                                <th>Пароль</th>
+                                <th>Status</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list"></tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="security" class="section">
+                <div class="view-header">
+                    <h1>Показ логов</h1>
+                    <p style="color: #444;">Логи посещений страниц</p>
+                </div>
+                <div id="logs-container"
+                    style="background: #030303; border: 1px solid var(--border); padding: 20px; max-height: 600px; overflow-y: auto;">
+                    <p style="color:#333">Загрузка...</p>
+                </div>
+            </section>
+            <section id="content" class="section">
+                <div class="view-header">
+                    <h1>Наполнение контента</h1>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="border: 1px solid var(--border); padding: 30px;">
+                        <h3 style="font-family: var(--font-head); margin-bottom: 20px;">КЛАНЫ</h3>
+                        <div id="admin-clan-list"></div>
+                    </div>
+                    <div style="border: 1px solid var(--border); padding: 30px;">
+                        <h3 style="font-family: var(--font-head); margin-bottom: 20px;">ТУРНИРЫ</h3>
+                        <div id="admin-tour-list"></div>
+                    </div>
+                </div>
+            </section>
+            <section id="messages" class="section">
+                <div class="view-header">
+                    <h1>Сообщения</h1>
+                </div>
+                <div id="admin-msg-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL: Edit User -->
+    <div class="modal-overlay" id="modal-edit-user">
+        <div class="modal-box">
+            <h2>Редактировать пользователя</h2>
+            <input type="hidden" id="eu-id">
+
+            <div class="field-group">
+                <label>Username</label>
+                <input type="text" id="eu-username" maxlength="10" data-max="10">
+                <div class="char-counter" id="eu-username-counter">0/10</div>
+                <div class="field-error" id="eu-username-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" id="eu-email" maxlength="25" data-max="25">
+                <div class="char-counter" id="eu-email-counter">0/25</div>
+                <div class="field-error" id="eu-email-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Discord</label>
+                <input type="text" id="eu-discord" maxlength="37" data-max="37">
+                <div class="char-counter" id="eu-discord-counter">0/37</div>
+                <div class="field-error" id="eu-discord-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Новый пароль (оставьте пустым чтобы не менять)</label>
+                <input type="text" id="eu-password" placeholder="Новый пароль..." maxlength="64" data-max="64">
+                <div class="char-counter" id="eu-password-counter">0/64</div>
+                <div class="field-error" id="eu-password-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Возраст</label>
+                <input type="number" id="eu-age" placeholder="Возраст" maxlength="3" data-max="3">
+                <div class="char-counter" id="eu-age-counter">0/3</div>
+                <div class="field-error" id="eu-age-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Страна</label>
+                <input type="text" id="eu-country" placeholder="Страна" maxlength="50" data-max="50">
+                <div class="char-counter" id="eu-country-counter">0/50</div>
+                <div class="field-error" id="eu-country-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Языки</label>
+                <input type="text" id="eu-languages" placeholder="Русский, English..." maxlength="100" data-max="100">
+                <div class="char-counter" id="eu-languages-counter">0/100</div>
+                <div class="field-error" id="eu-languages-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Время игры</label>
+                <input type="text" id="eu-play-time" placeholder="Вечер, Ночь..." maxlength="50" data-max="50">
+                <div class="char-counter" id="eu-play-time-counter">0/50</div>
+                <div class="field-error" id="eu-play-time-error"></div>
+            </div>
+
+            <div class="checkbox-row"><input type="checkbox" id="eu-has-mic"><label for="eu-has-mic">Есть микрофон</label></div>
+            <div class="checkbox-row"><input type="checkbox" id="eu-looking-for-team"><label for="eu-looking-for-team">Ищет команду</label></div>
+
+            <div style="margin: 20px 0; border-top: 1px solid #222; padding-top: 20px;">
+                <h3 style="font-family:var(--font-head); font-size:14px; color:var(--accent); margin-bottom:15px;">
+                    Combat Configuration</h3>
+
+                <div class="field-group">
+                    <label>Active Protocol (Game)</label>
+                    <select id="eu-game">
+                        <option value="Valorant">Valorant</option>
+                        <option value="CS2">Counter-Strike 2</option>
+                        <option value="Dota 2">Dota 2</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label>Current Tier (Rank)</label>
+                    <input type="text" id="eu-rank" placeholder="Напр: Diamond 2" maxlength="15" data-max="15">
+                    <div class="char-counter" id="eu-rank-counter">0/15</div>
+                    <div class="field-error" id="eu-rank-error"></div>
+                </div>
+
+                <div class="field-group">
+                    <label>Primary Role</label>
+                    <input type="text" id="eu-role" placeholder="Напр: Duelist / Sniper" maxlength="10" data-max="10">
+                    <div class="char-counter" id="eu-role-counter">0/10</div>
+                    <div class="field-error" id="eu-role-error"></div>
+                </div>
+            </div>
+
+            <div class="modal-btns">
+                <button class="btn-save" onclick="saveUser()">Сохранить</button>
+                <button class="btn-cancel" onclick="closeModal('modal-edit-user')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Edit Clan -->
+    <div class="modal-overlay" id="modal-edit-clan">
+        <div class="modal-box">
+            <h2>Редактировать клан</h2>
+            <input type="hidden" id="ec-id">
+
+            <div class="field-group">
+                <label>Название</label>
+                <input type="text" id="ec-name" maxlength="50" data-max="50">
+                <div class="char-counter" id="ec-name-counter">0/50</div>
+                <div class="field-error" id="ec-name-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Игра</label>
+                <input type="text" id="ec-game" maxlength="30" data-max="30">
+                <div class="char-counter" id="ec-game-counter">0/30</div>
+                <div class="field-error" id="ec-game-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Описание</label>
+                <textarea id="ec-description" rows="4" maxlength="500" data-max="500"></textarea>
+                <div class="char-counter" id="ec-description-counter">0/500</div>
+                <div class="field-error" id="ec-description-error"></div>
+            </div>
+
+            <div class="modal-btns">
+                <button class="btn-save" onclick="saveClan()">Сохранить</button>
+                <button class="btn-cancel" onclick="closeModal('modal-edit-clan')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Edit Tournament -->
+    <div class="modal-overlay" id="modal-edit-tour">
+        <div class="modal-box">
+            <h2>Редактировать турнир</h2>
+            <input type="hidden" id="et-id">
+
+            <div class="field-group">
+                <label>Название</label>
+                <input type="text" id="et-title" maxlength="100" data-max="100">
+                <div class="char-counter" id="et-title-counter">0/100</div>
+                <div class="field-error" id="et-title-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Игра</label>
+                <input type="text" id="et-game" maxlength="30" data-max="30">
+                <div class="char-counter" id="et-game-counter">0/30</div>
+                <div class="field-error" id="et-game-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Призовой фонд</label>
+                <input type="text" id="et-prize" maxlength="50" data-max="50">
+                <div class="char-counter" id="et-prize-counter">0/50</div>
+                <div class="field-error" id="et-prize-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Дата</label>
+                <input type="text" id="et-date" maxlength="30" data-max="30">
+                <div class="char-counter" id="et-date-counter">0/30</div>
+                <div class="field-error" id="et-date-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Слоты</label>
+                <input type="text" id="et-slots" maxlength="10" data-max="10">
+                <div class="char-counter" id="et-slots-counter">0/10</div>
+                <div class="field-error" id="et-slots-error"></div>
+            </div>
+
+            <div class="field-group">
+                <label>Описание</label>
+                <textarea id="et-description" rows="4" maxlength="1000" data-max="1000"></textarea>
+                <div class="char-counter" id="et-description-counter">0/1000</div>
+                <div class="field-error" id="et-description-error"></div>
+            </div>
+
+            <div class="modal-btns">
+                <button class="btn-save" onclick="saveTour()">Сохранить</button>
+                <button class="btn-cancel" onclick="closeModal('modal-edit-tour')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+<footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <svg viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 30px;">
+                        <rect x="0" y="5" width="5" height="30" fill="#0066ff" />
+                        <text x="15" y="28" fill="white"
+                            style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-1px;">GGLINK</text>
+                    </svg>
+                </div>
+                <div class="footer-col">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="brows.html">Игроки</a></li>
+                        <li><a href="clans.html">Команды</a></li>
+                        <li><a href="tournament.html">Турниры</a></li>
+                        <li><a href="games.html">Игры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Что мы предлагаем</a></li>
+                        <li><a href="#">Сейчас в поиске</a></li>
+                        <li><a href="#">Партнеры платформы</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('burger-icon');
+            menu.classList.toggle('active');
+            icon.className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) return;
+                const authBtns = document.getElementById('auth-buttons');
+                const profileIcon = document.getElementById('header-profile-icon');
+                if (authBtns) authBtns.style.display = 'none';
+                const ma = document.getElementById('mobile-auth'); if (ma) ma.style.display = 'none';
+                if (profileIcon) { profileIcon.style.display = 'flex'; profileIcon.innerText = user.username[0].toUpperCase(); }
+                if (user.isAdmin) {
+                    const al = document.getElementById('admin-link'); if (al) al.style.display = 'inline-block';
+                    const mal = document.getElementById('mobile-admin-link'); if (mal) mal.classList.add('visible');
+                }
+            } catch (e) { }
+        }
+        function checkMsgAuth(e) {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) { if (e) e.preventDefault(); alert('Для доступа к сообщениям необходимо авторизоваться.'); window.location.href = 'auth.html'; return false; }
+                return true;
+            } catch (e) { return false; }
+        }
+        checkAuth();
+
+        // ===== ВАЛИДАЦИЯ: счётчики символов и ошибки =====
+        const emailRegex = /^[^\s@]+@[^\s@]+\.com$/;
+
+        function initCharCounters() {
+            const inputs = document.querySelectorAll('[data-max]');
+            inputs.forEach(input => {
+                const max = parseInt(input.getAttribute('data-max'));
+                const counter = document.getElementById(input.id + '-counter');
+
+                const update = () => {
+                    const len = input.value.length;
+                    if (counter) {
+                        counter.textContent = len + '/' + max;
+                        counter.classList.remove('warn', 'limit');
+                        if (len > max) {
+                            counter.classList.add('limit');
+                        } else if (len >= max * 0.9) {
+                            counter.classList.add('warn');
+                        }
+                    }
+                    // Remove error state on input
+                    input.classList.remove('input-error');
+                    const errEl = document.getElementById(input.id + '-error');
+                    if (errEl) errEl.style.display = 'none';
+                };
+
+                input.addEventListener('input', update);
+                update();
+            });
+        }
+
+        function clearFieldErrors(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            modal.querySelectorAll('.field-error').forEach(el => el.style.display = 'none');
+        }
+
+        function setFieldError(inputId, msg) {
+            const input = document.getElementById(inputId);
+            if (input) input.classList.add('input-error');
+            const errEl = document.getElementById(inputId + '-error');
+            if (errEl) {
+                errEl.textContent = msg;
+                errEl.style.display = 'block';
+            }
+        }
+
+        function updateCountersInModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.querySelectorAll('[data-max]').forEach(input => {
+                const max = parseInt(input.getAttribute('data-max'));
+                const counter = document.getElementById(input.id + '-counter');
+                if (counter) {
+                    const len = input.value.length;
+                    counter.textContent = len + '/' + max;
+                    counter.classList.remove('warn', 'limit');
+                    if (len > max) counter.classList.add('limit');
+                    else if (len >= max * 0.9) counter.classList.add('warn');
+                }
+            });
+        }
+
+        // Age validation (digits only, 10-100)
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharCounters();
+
+            const ageInput = document.getElementById('eu-age');
+            if (ageInput) {
+                ageInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length > 3) this.value = this.value.slice(0, 3);
+                    const num = parseInt(this.value);
+                    if (num > 100) this.value = '100';
+                    const counter = document.getElementById('eu-age-counter');
+                    if (counter) counter.textContent = this.value.length + '/3';
+                });
+                ageInput.addEventListener('blur', function() {
+                    if (this.value !== '') {
+                        const num = parseInt(this.value);
+                        if (num < 10) this.value = '10';
+                        if (num > 100) this.value = '100';
+                    }
+                });
+                ageInput.addEventListener('keydown', function(e) {
+                    if ([8, 46, 9, 27, 13, 37, 38, 39, 40].includes(e.keyCode)) return;
+                    if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) return;
+                    if (e.key < '0' || e.key > '9') e.preventDefault();
+                });
+            }
+        });
+
+        // ===== AUTO LOGIN =====
+        async function tryAutoLogin() {
+            try {
+                const res = await fetch('/api/admin/full-users');
+                if (res.ok) {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'grid';
+                    loadData('users');
+                    return;
+                }
+            } catch (e) { }
+        }
+        tryAutoLogin();
+
+        async function adminLogin() {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-pass').value;
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+            if (res.ok) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'grid';
+                loadData('users');
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') adminLogin(); });
+
+        function showSection(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            loadData(id);
+        }
+
+        async function loadData(section) {
+            if (section === 'users') {
+                const res = await fetch('/api/admin/full-users');
+                if (!res.ok) return;
+                const users = await res.json();
+                document.getElementById('user-list').innerHTML = users.map(u => `
+            <tr>
+                <td>${u.id}</td>
+                <td><b>${u.username || '—'}</b></td>
+                <td>${u.email || '—'}</td>
+                <td>${u.discord_tag || '—'}</td>
+                <td style="color:#555;">${u.password ? '••••••' : '—'}</td>
+                <td><span class="badge badge-success">${u.status}</span></td>
+                <td>
+                    <button class="btn-sm" onclick='editUser(${JSON.stringify(u).replace(/'/g, "&#39;")})'>Изменить</button>
+                    <button class="btn-sm btn-danger" onclick="deleteUser(${u.id})">Удалить</button>
+                </td>
+            </tr>
+        `).join('');
+            }
+            if (section === 'security') {
+                const res = await fetch('/api/admin/visit-logs');
+                if (!res.ok) return;
+                const logs = await res.json();
+                if (logs.length === 0) {
+                    document.getElementById('logs-container').innerHTML = '<p style="color:#333">Логи пока пусты.</p>';
+                } else {
+                    document.getElementById('logs-container').innerHTML = logs.map(l => `
+                <div class="log-entry">
+                    <span style="color:#333">${new Date(l.timestamp).toLocaleString()}</span>
+                    <span class="log-ip">${l.ip}</span>
+                    <span style="color:var(--accent)">${l.username || 'guest'}</span>
+                    <span style="color:#888">${l.page}</span>
+                </div>
+            `).join('');
+                }
+            }
+            if (section === 'content') {
+                const clansRes = await fetch('/api/clans');
+                const clans = clansRes.ok ? await clansRes.json() : [];
+                document.getElementById('admin-clan-list').innerHTML = clans.length === 0
+                    ? '<p style="color:#333">Нет кланов</p>'
+                    : clans.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;">
+                <span>${c.name} (${c.game})</span>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-sm" onclick='editClan(${JSON.stringify(c)})'>Изменить</button>
+                    <button class="btn-sm btn-danger" onclick="deleteClan(${c.id})">Удалить</button>
+                </div>
+            </div>`).join('');
+                const toursRes = await fetch('/api/tournaments');
+                const tours = toursRes.ok ? await toursRes.json() : [];
+                document.getElementById('admin-tour-list').innerHTML = tours.length === 0
+                    ? '<p style="color:#333">Нет турниров</p>'
+                    : tours.map(t => `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;">
+                <span>${t.title} (${t.game})</span>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-sm" onclick='editTour(${JSON.stringify(t)})'>Изменить</button>
+                    <button class="btn-sm btn-danger" onclick="deleteTour(${t.id})">Удалить</button>
+                </div>
+            </div>`).join('');
+            }
+            if (section === 'messages') {
+                const res = await fetch('/api/admin/messages');
+                if (!res.ok) return;
+                const msgs = await res.json();
+                document.getElementById('admin-msg-list').innerHTML = msgs.length === 0
+                    ? '<p style="color:#333">Нет сообщений</p>'
+                    : msgs.map(m => {
+                        let content = m.content || '';
+                        const isImage = /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/i.test(content) || /^data:image\//i.test(content);
+                        const isAudio = /\.(mp3|ogg|wav|m4a|aac|webm|flac)(\?.*)?$/i.test(content) || /^data:audio\//i.test(content) || /^blob:/i.test(content);
+                        let rendered;
+                        if (isImage) {
+                            rendered = `<img class="msg-image" src="${content}" alt="image">`;
+                        } else if (isAudio) {
+                            rendered = `<audio controls style="max-width:100%; margin-top:8px;"><source src="${content}">Браузер не поддерживает аудио</audio>`;
+                        } else {
+                            rendered = content;
+                        }
+                        return `<div class="msg-entry"><span style="color:var(--accent);font-weight:700;">${m.sender}</span> → ${rendered} <span style="color:#333;font-size:11px;margin-left:10px;">${m.timestamp}</span></div>`;
+                    }).join('');
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        // ===== USERS =====
+        function editUser(u) {
+            clearFieldErrors('modal-edit-user');
+            document.getElementById('eu-id').value = u.id;
+            document.getElementById('eu-username').value = u.username || '';
+            document.getElementById('eu-email').value = u.email || '';
+            document.getElementById('eu-discord').value = u.discord_tag || '';
+            document.getElementById('eu-password').value = '';
+            document.getElementById('eu-age').value = u.age || '';
+            document.getElementById('eu-country').value = u.country || '';
+            document.getElementById('eu-languages').value = u.languages || '';
+            document.getElementById('eu-play-time').value = u.play_time || '';
+            document.getElementById('eu-has-mic').checked = !!u.has_mic;
+            document.getElementById('eu-looking-for-team').checked = !!u.looking_for_team;
+            document.getElementById('eu-game').value = u.game || 'Valorant';
+            document.getElementById('eu-rank').value = u.rank || '';
+            document.getElementById('eu-role').value = u.role || '';
+            updateCountersInModal('modal-edit-user');
+            document.getElementById('modal-edit-user').classList.add('show');
+        }
+
+        async function saveUser() {
+            clearFieldErrors('modal-edit-user');
+            let hasError = false;
+
+            const username = document.getElementById('eu-username').value.trim();
+            const email = document.getElementById('eu-email').value.trim();
+            const discord = document.getElementById('eu-discord').value.trim();
+            const password = document.getElementById('eu-password').value;
+            const age = document.getElementById('eu-age').value;
+            const country = document.getElementById('eu-country').value.trim();
+            const languages = document.getElementById('eu-languages').value.trim();
+            const playTime = document.getElementById('eu-play-time').value.trim();
+            const rank = document.getElementById('eu-rank').value.trim();
+            const role = document.getElementById('eu-role').value.trim();
+
+            // Username
+            if (!username) { setFieldError('eu-username', 'Введите никнейм'); hasError = true; }
+            else if (username.length < 2) { setFieldError('eu-username', 'Минимум 2 символа'); hasError = true; }
+            else if (username.length > 10) { setFieldError('eu-username', 'Максимум 10 символов'); hasError = true; }
+            else if (!/^[a-zA-Zа-яА-ЯёЁ0-9]+$/.test(username)) { setFieldError('eu-username', 'Только буквы и цифры'); hasError = true; }
+
+            // Email
+            if (!email) { setFieldError('eu-email', 'Введите email'); hasError = true; }
+            else if (email.length > 25) { setFieldError('eu-email', 'Максимум 25 символов'); hasError = true; }
+            else if (!emailRegex.test(email)) { setFieldError('eu-email', 'Email должен заканчиваться на .com'); hasError = true; }
+
+            // Discord
+            if (discord && discord.length > 37) { setFieldError('eu-discord', 'Максимум 37 символов'); hasError = true; }
+            else if (discord && !/^[a-zA-Z0-9_.]{2,32}(#\d{4})?$/.test(discord)) { setFieldError('eu-discord', 'Формат: username или user#1234'); hasError = true; }
+
+            // Password (only if not empty)
+            if (password) {
+                if (password.length < 6) { setFieldError('eu-password', 'Минимум 6 символов'); hasError = true; }
+                else if (password.length > 64) { setFieldError('eu-password', 'Максимум 64 символа'); hasError = true; }
+            }
+
+            // Age
+            if (age !== '') {
+                const ageNum = parseInt(age);
+                if (isNaN(ageNum) || ageNum < 10 || ageNum > 100) { setFieldError('eu-age', 'Возраст: 10–100'); hasError = true; }
+            }
+
+            // Country
+            if (country.length > 50) { setFieldError('eu-country', 'Максимум 50 символов'); hasError = true; }
+
+            // Languages
+            if (languages.length > 100) { setFieldError('eu-languages', 'Максимум 100 символов'); hasError = true; }
+
+            // Play time
+            if (playTime.length > 50) { setFieldError('eu-play-time', 'Максимум 50 символов'); hasError = true; }
+
+            // Rank
+            if (rank.length > 15) { setFieldError('eu-rank', 'Максимум 15 символов'); hasError = true; }
+
+            // Role
+            if (role.length > 10) { setFieldError('eu-role', 'Максимум 10 символов'); hasError = true; }
+
+            if (hasError) return;
+
+            const id = document.getElementById('eu-id').value;
+            const body = {
+                username: username,
+                email: email,
+                discord_tag: discord,
+                password: password,
+                age: age || null,
+                country: country,
+                languages: languages,
+                play_time: playTime,
+                has_mic: document.getElementById('eu-has-mic').checked ? 1 : 0,
+                looking_for_team: document.getElementById('eu-looking-for-team').checked ? 1 : 0,
+                game: document.getElementById('eu-game').value,
+                rank: rank,
+                role: role
+            };
+            const res = await fetch('/api/admin/users/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            if (res.ok) {
+                try {
+                    const cur = JSON.parse(localStorage.getItem('currentUser'));
+                    if (cur && String(cur.id) === String(id)) {
+                        cur.username = body.username;
+                        cur.email = body.email;
+                        localStorage.setItem('currentUser', JSON.stringify(cur));
+                    }
+                } catch(e) {}
+                closeModal('modal-edit-user'); loadData('users');
+            }
+            else { alert('Ошибка при сохранении'); }
+        }
+
+        // ===== CLANS =====
+        function editClan(c) {
+            clearFieldErrors('modal-edit-clan');
+            document.getElementById('ec-id').value = c.id;
+            document.getElementById('ec-name').value = c.name || '';
+            document.getElementById('ec-game').value = c.game || '';
+            document.getElementById('ec-description').value = c.description || '';
+            updateCountersInModal('modal-edit-clan');
+            document.getElementById('modal-edit-clan').classList.add('show');
+        }
+
+        async function saveClan() {
+            clearFieldErrors('modal-edit-clan');
+            let hasError = false;
+
+            const name = document.getElementById('ec-name').value.trim();
+            const game = document.getElementById('ec-game').value.trim();
+            const description = document.getElementById('ec-description').value.trim();
+
+            if (!name) { setFieldError('ec-name', 'Введите название клана'); hasError = true; }
+            else if (name.length > 50) { setFieldError('ec-name', 'Максимум 50 символов'); hasError = true; }
+
+            if (!game) { setFieldError('ec-game', 'Введите игру'); hasError = true; }
+            else if (game.length > 30) { setFieldError('ec-game', 'Максимум 30 символов'); hasError = true; }
+
+            if (description.length > 500) { setFieldError('ec-description', 'Максимум 500 символов'); hasError = true; }
+
+            if (hasError) return;
+
+            const id = document.getElementById('ec-id').value;
+            const body = { name: name, game: game, description: description };
+            await fetch('/api/admin/clans/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            closeModal('modal-edit-clan');
+            loadData('content');
+        }
+
+        // ===== TOURNAMENTS =====
+        function editTour(t) {
+            clearFieldErrors('modal-edit-tour');
+            document.getElementById('et-id').value = t.id;
+            document.getElementById('et-title').value = t.title || '';
+            document.getElementById('et-game').value = t.game || '';
+            document.getElementById('et-prize').value = t.prize_pool || '';
+            document.getElementById('et-date').value = t.date || '';
+            document.getElementById('et-slots').value = t.slots || '';
+            document.getElementById('et-description').value = t.description || '';
+            updateCountersInModal('modal-edit-tour');
+            document.getElementById('modal-edit-tour').classList.add('show');
+        }
+
+        async function saveTour() {
+            clearFieldErrors('modal-edit-tour');
+            let hasError = false;
+
+            const title = document.getElementById('et-title').value.trim();
+            const game = document.getElementById('et-game').value.trim();
+            const prize = document.getElementById('et-prize').value.trim();
+            const date = document.getElementById('et-date').value.trim();
+            const slots = document.getElementById('et-slots').value.trim();
+            const description = document.getElementById('et-description').value.trim();
+
+            if (!title) { setFieldError('et-title', 'Введите название турнира'); hasError = true; }
+            else if (title.length > 100) { setFieldError('et-title', 'Максимум 100 символов'); hasError = true; }
+
+            if (!game) { setFieldError('et-game', 'Введите игру'); hasError = true; }
+            else if (game.length > 30) { setFieldError('et-game', 'Максимум 30 символов'); hasError = true; }
+
+            if (prize.length > 50) { setFieldError('et-prize', 'Максимум 50 символов'); hasError = true; }
+
+            if (date.length > 30) { setFieldError('et-date', 'Максимум 30 символов'); hasError = true; }
+
+            if (slots.length > 10) { setFieldError('et-slots', 'Максимум 10 символов'); hasError = true; }
+
+            if (description.length > 1000) { setFieldError('et-description', 'Максимум 1000 символов'); hasError = true; }
+
+            if (hasError) return;
+
+            const id = document.getElementById('et-id').value;
+            const body = { title: title, game: game, prize_pool: prize, date: date, slots: slots, description: description };
+            await fetch('/api/admin/tournaments/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            closeModal('modal-edit-tour');
+            loadData('content');
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('Удалить пользователя?')) return;
+            await fetch('/api/admin/users/' + id, { method: 'DELETE' });
+            try {
+                const cur = JSON.parse(localStorage.getItem('currentUser'));
+                if (cur && String(cur.id) === String(id)) {
+                    localStorage.removeItem('currentUser');
+                }
+            } catch(e) {}
+            loadData('users');
+        }
+        async function deleteClan(id) { if (!confirm('Удалить клан?')) return; await fetch('/api/admin/clans/' + id, { method: 'DELETE' }); loadData('content'); }
+        async function deleteTour(id) { if (!confirm('Удалить турнир?')) return; await fetch('/api/admin/tournaments/' + id, { method: 'DELETE' }); loadData('content'); }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGLINK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="header_footer.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #151515;
+            --accent: #0066ff;
+            --white: #ffffff;
+            --gray: #666666;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        [data-aos="reveal"] {
+            opacity: 0;
+            filter: blur(25px);
+            transform: scale(1);
+            transition: opacity 1s ease, filter 1s ease;
+        }
+
+        [data-aos="reveal"].aos-animate {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .mobile-admin-link {
+            display: none !important;
+            color: #ff3333 !important;
+            border: 1px solid #ff3333;
+            padding: 10px 30px;
+            font-size: 14px !important;
+        }
+
+        .mobile-admin-link.visible {
+            display: inline-block !important;
+        }
+
+        .hero {
+            padding: 100px 0 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .hero h1 {
+            font-family: var(--font-head);
+            font-size: 80px;
+            text-transform: uppercase;
+            letter-spacing: -4px;
+            line-height: 0.8;
+        }
+
+        .btn-create-trigger {
+            padding: 20px 40px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-create-trigger:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .clan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            padding-bottom: 100px;
+        }
+
+        .clan-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clan-card:hover {
+            border-color: var(--accent);
+            background: #080808;
+        }
+
+        .clan-name {
+            font-family: var(--font-head);
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        /* ====== АДАПТИВ ====== */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                padding: 60px 0 40px;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+                letter-spacing: -2px;
+            }
+
+            .clan-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .clan-card {
+                padding: 25px;
+            }
+
+            .clan-name {
+                font-size: 24px;
+            }
+
+            .btn-create-trigger {
+                padding: 15px 30px;
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero {
+                padding: 40px 0 30px;
+            }
+
+            .clan-card {
+                padding: 20px;
+            }
+
+            .clan-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <img src="/assets/logo.svg" alt="GGLINK Logo">
+                </a>
+                <nav class="nav-menu">
+                    <a href="brows.html">Найти тиммейта</a>
+                    <a href="games.html">Библиотека игр</a>
+                    <a href="tournament.html">Турниры</a>
+                    <a href="clans.html">Кланы</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="message.html" class="msg-icon" title="Сообщения" onclick="return checkMsgAuth(event)">
+                        <i class="fas fa-comment-dots"></i>
+                    </a>
+                    <a href="admin.html" class="admin-link" id="admin-link"><i class="fas fa-shield-alt"></i> Админ</a>
+                    <a href="profile.html" class="profile-icon" id="header-profile-icon"></a>
+                    <span id="auth-buttons">
+                        <a href="auth.html"
+                            style="color:var(--gray); text-decoration:none; font-size:12px; font-weight:600; text-transform:uppercase;">Войти</a>
+                        <a href="auth.html" class="btn btn-blue" style="margin-left:10px;">Регистрация</a>
+                    </span>
+                    <button class="burger-btn" id="burger-btn" onclick="toggleMenu()">
+                        <i class="fas fa-bars" id="burger-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="brows.html">Найти тиммейта</a>
+        <a href="games.html">Библиотека игр</a>
+        <a href="tournament.html">Турниры</a>
+        <a href="clans.html">Кланы</a>
+        <a href="message.html">Сообщения</a>
+        <!-- ДОБАВЬ ЭТУ СТРОКУ -->
+        <a href="admin.html" class="mobile-admin-link" id="mobile-admin-link"><i class="fas fa-shield-alt"></i>
+            Админ</a>
+        <div class="mobile-auth" id="mobile-auth">
+            <a href="auth.html">Войти</a>
+            <a href="auth.html" class="btn btn-blue">Регистрация</a>
+        </div>
+    </div>
+
+
+    <main class="container">
+        <section class="hero" data-aos="reveal">
+            <div>
+                <h1>Кланы <br> </h1>
+                <p style="color:var(--gray); margin-top:20px;">Вступайте в кланы или создайте свой собственный альянс.
+                </p>
+            </div>
+            <a href="clan_create.html" class="btn-create-trigger" onclick="return checkCreateAuth(event)">+ Создать
+                отряд</a>
+        </section>
+        <div class="clan-grid" id="clan-list"></div>
+    </main>
+
+<footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <svg viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 30px;">
+                        <rect x="0" y="5" width="5" height="30" fill="#0066ff" />
+                        <text x="15" y="28" fill="white"
+                            style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-1px;">GGLINK</text>
+                    </svg>
+                </div>
+                <div class="footer-col">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="brows.html">Игроки</a></li>
+                        <li><a href="clans.html">Команды</a></li>
+                        <li><a href="tournament.html">Турниры</a></li>
+                        <li><a href="games.html">Игры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Что мы предлагаем</a></li>
+                        <li><a href="#">Сейчас в поиске</a></li>
+                        <li><a href="#">Партнеры платформы</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('burger-icon');
+            menu.classList.toggle('active');
+            icon.className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) return;
+                const authBtns = document.getElementById('auth-buttons');
+                const profileIcon = document.getElementById('header-profile-icon');
+                if (authBtns) authBtns.style.display = 'none';
+                const ma = document.getElementById('mobile-auth'); if (ma) ma.style.display = 'none';
+                if (profileIcon) { profileIcon.style.display = 'flex'; profileIcon.innerText = user.username[0].toUpperCase(); }
+                if (user.isAdmin) {
+                    const al = document.getElementById('admin-link'); if (al) al.style.display = 'inline-block';
+                    const mobileAdminLink = document.getElementById('mobile-admin-link');
+                    if (mobileAdminLink) mobileAdminLink.classList.add('visible');
+                }
+            } catch (e) { }
+        }
+
+
+
+        function checkMsgAuth(e) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || !user.username) { if (e) e.preventDefault(); alert('Для доступа к сообщениям необходимо авторизоваться.'); window.location.href = 'auth.html'; return false; }
+            return true;
+        }
+        function checkCreateAuth(e) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || !user.username) {
+                e.preventDefault();
+                alert('Для создания клана необходимо авторизоваться.');
+                window.location.href = 'auth.html';
+                return false;
+            }
+            return true;
+        }
+        checkAuth();
+        AOS.init();
+
+        async function loadClans() {
+            try {
+                const res = await fetch('/api/clans');
+                const clans = await res.json();
+                const container = document.getElementById('clan-list');
+                if (clans.length === 0) {
+                    container.innerHTML = '<p style="color:gray; padding:20px;">Кланов пока нет.</p>';
+                    return;
+                }
+                container.innerHTML = clans.map((c, i) => `
+            <div class="clan-card" data-aos="reveal" data-aos-delay="${i * 100}" onclick="window.location.href='clan_info.html?id=${c.id}'">
+                <div style="font-size:10px; color:var(--accent); font-weight:800; margin-bottom:10px; letter-spacing:2px;"></div>
+                <h2 class="clan-name">${c.name}</h2>
+                <div style="color:var(--gray); font-size:11px; font-weight:800; text-transform:uppercase;">
+                    ${c.game} // Участники: ${c.members_count} // Регион: ${c.region || 'GLO'}
+                </div>
+            </div>
+        `).join('');
+            } catch (err) { console.error("Ошибка загрузки:", err); }
+        }
+        loadClans();
+    </script>
+</body>
+
+</html>

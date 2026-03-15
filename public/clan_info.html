@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGLINK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="header_footer.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #151515;
+            --accent: #0066ff;
+            --white: #ffffff;
+            --gray: #666666;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        [data-aos="reveal"] {
+            opacity: 0;
+            filter: blur(30px);
+            transition: 1s ease;
+        }
+
+        [data-aos="reveal"].aos-animate {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .mobile-admin-link {
+            display: none !important;
+            color: #ff3333 !important;
+            border: 1px solid #ff3333;
+            padding: 10px 30px;
+            font-size: 14px !important;
+        }
+
+        .mobile-admin-link.visible {
+            display: inline-block !important;
+        }
+
+        .clan-wrapper {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 60px;
+            padding: 80px 0;
+        }
+
+        .sidebar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 50px;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .clan-avatar {
+            width: 150px;
+            height: 150px;
+            border: 1px solid var(--accent);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .clan-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .roster-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 25px;
+            background: #030303;
+            border: 1px solid var(--border);
+        }
+
+        .m-role {
+            font-size: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .info-label {
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .big-title {
+            font-family: var(--font-head);
+            font-size: 72px;
+            text-transform: uppercase;
+            letter-spacing: -4px;
+            line-height: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .btn-join {
+            width: 100%;
+            padding: 20px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-join:hover {
+            filter: brightness(1.2);
+        }
+
+        .btn-leave {
+            background: transparent;
+            border: 1px solid #ff3333;
+            color: #ff3333;
+        }
+
+        .btn-leave:hover {
+            background: #ff3333;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--white);
+        }
+
+        .btn-edit:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .edit-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .edit-modal-content {
+            width: 500px;
+            background: #050505;
+            border: 1px solid var(--border);
+            padding: 50px;
+        }
+
+        .edit-modal-content label {
+            display: block;
+            font-family: var(--font-head);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .edit-modal-content input,
+        .edit-modal-content textarea {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 14px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* АДАПТИВ */
+        @media (max-width: 1024px) {
+            .clan-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .clan-wrapper {
+                gap: 30px;
+                padding: 40px 0;
+            }
+
+            .sidebar {
+                position: static;
+                padding: 30px;
+            }
+
+            .big-title {
+                font-size: 40px;
+                letter-spacing: -2px;
+            }
+
+            .clan-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .edit-modal-content {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .big-title {
+                font-size: 32px;
+            }
+
+            .sidebar {
+                padding: 20px;
+            }
+
+            .member-card {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <img src="/assets/logo.svg" alt="GGLINK Logo">
+                </a>
+                <nav class="nav-menu">
+                    <a href="brows.html">Найти тиммейта</a>
+                    <a href="games.html">Библиотека игр</a>
+                    <a href="tournament.html">Турниры</a>
+                    <a href="clans.html">Кланы</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="message.html" class="msg-icon" title="Сообщения" onclick="return checkMsgAuth(event)">
+                        <i class="fas fa-comment-dots"></i>
+                    </a>
+                    <a href="admin.html" class="admin-link" id="admin-link"><i class="fas fa-shield-alt"></i> Админ</a>
+                    <a href="profile.html" class="profile-icon" id="header-profile-icon"></a>
+                    <span id="auth-buttons">
+                        <a href="auth.html"
+                            style="color:var(--gray); text-decoration:none; font-size:12px; font-weight:600; text-transform:uppercase;">Войти</a>
+                        <a href="auth.html" class="btn btn-blue" style="margin-left:10px;">Регистрация</a>
+                    </span>
+                    <button class="burger-btn" id="burger-btn" onclick="toggleMenu()">
+                        <i class="fas fa-bars" id="burger-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="brows.html">Найти тиммейта</a>
+        <a href="games.html">Библиотека игр</a>
+        <a href="tournament.html">Турниры</a>
+        <a href="clans.html">Кланы</a>
+        <a href="message.html">Сообщения</a>
+        <!-- ДОБАВЬ ЭТУ СТРОКУ -->
+        <a href="admin.html" class="mobile-admin-link" id="mobile-admin-link"><i class="fas fa-shield-alt"></i>
+            Админ</a>
+        <div class="mobile-auth" id="mobile-auth">
+            <a href="auth.html">Войти</a>
+            <a href="auth.html" class="btn btn-blue">Регистрация</a>
+        </div>
+    </div>
+
+
+    <main class="container clan-wrapper" id="clan-root"></main>
+
+    <div class="edit-modal" id="editModal">
+        <div class="edit-modal-content">
+            <h2 style="font-family:var(--font-head); margin-bottom:30px;">Редактировать клан</h2>
+            <label>Описание</label>
+            <textarea id="edit-desc" rows="4"></textarea>
+            <label>Минимальный ранг</label>
+            <input type="text" id="edit-rank">
+            <label>Регион</label>
+            <input type="text" id="edit-region">
+            <div style="display:flex; gap:15px; margin-top:10px;">
+                <button class="btn-join" onclick="saveEdit()">Сохранить</button>
+                <button class="btn-join btn-edit"
+                    onclick="document.getElementById('editModal').style.display='none'">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+<footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <svg viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 30px;">
+                        <rect x="0" y="5" width="5" height="30" fill="#0066ff" />
+                        <text x="15" y="28" fill="white"
+                            style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-1px;">GGLINK</text>
+                    </svg>
+                </div>
+                <div class="footer-col">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="brows.html">Игроки</a></li>
+                        <li><a href="clans.html">Команды</a></li>
+                        <li><a href="tournament.html">Турниры</a></li>
+                        <li><a href="games.html">Игры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Что мы предлагаем</a></li>
+                        <li><a href="#">Сейчас в поиске</a></li>
+                        <li><a href="#">Партнеры платформы</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('burger-icon');
+            menu.classList.toggle('active');
+            icon.className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) return;
+                const authBtns = document.getElementById('auth-buttons');
+                const profileIcon = document.getElementById('header-profile-icon');
+                if (authBtns) authBtns.style.display = 'none';
+                const ma = document.getElementById('mobile-auth'); if (ma) ma.style.display = 'none';
+                if (profileIcon) { profileIcon.style.display = 'flex'; profileIcon.innerText = user.username[0].toUpperCase(); }
+                if (user.isAdmin) {
+                    const al = document.getElementById('admin-link'); if (al) al.style.display = 'inline-block';
+                    const mobileAdminLink = document.getElementById('mobile-admin-link');
+                    if (mobileAdminLink) mobileAdminLink.classList.add('visible');
+                }
+            } catch (e) { }
+        }
+
+
+        function checkMsgAuth(e) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || !user.username) { if (e) e.preventDefault(); alert('Для доступа к сообщениям необходимо авторизоваться.'); window.location.href = 'auth.html'; return false; }
+            return true;
+        }
+        checkAuth();
+        AOS.init();
+
+        const clanId = new URLSearchParams(window.location.search).get('id');
+        let clanData = null;
+
+        async function load() {
+            try {
+                const res = await fetch(`/api/clans/${clanId}`);
+                const c = await res.json();
+                clanData = c;
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const isLeader = currentUser && currentUser.username === c.leader;
+
+                let isMember = isLeader;
+                if (currentUser && !isLeader) {
+                    try {
+                        const mRes = await fetch('/api/me/clans');
+                        if (mRes.ok) {
+                            const myClans = await mRes.json();
+                            isMember = myClans.some(mc => mc.id == clanId);
+                        }
+                    } catch (e) { }
+                }
+
+                let buttonsHtml = '';
+                if (isLeader) {
+                    buttonsHtml = `<button class="btn-join btn-edit" style="margin-top:30px;" onclick="openEditModal()"><i class="fas fa-edit"></i> Редактировать</button>`;
+                } else if (isMember) {
+                    buttonsHtml = `<button class="btn-join btn-leave" style="margin-top:30px;" onclick="leaveClan()"><i class="fas fa-sign-out-alt"></i> Покинуть клан</button>`;
+                } else {
+                    buttonsHtml = `<button class="btn-join" style="margin-top:30px;" onclick="joinClan()">Request to Join</button>`;
+                }
+
+                let membersHtml = `<div class="member-card"><span>${c.leader}</span><span class="m-role">Лидер</span></div>`;
+                try {
+                    const memRes = await fetch(`/api/clans/${clanId}/members`);
+                    if (memRes.ok) {
+                        const members = await memRes.json();
+                        members.forEach(m => {
+                            if (m.username !== c.leader) {
+                                membersHtml += `<div class="member-card"><span>${m.username}</span><span class="m-role">${m.role || 'Member'}</span></div>`;
+                            }
+                        });
+                    }
+                } catch (e) { }
+
+                document.getElementById('clan-root').innerHTML = `
+            <aside class="sidebar" data-aos="reveal">
+                <div class="clan-avatar">
+                  ${c.avatar_url ? `<img src="${c.avatar_url}">` : '<i class="fas fa-shield-halved fa-3x" style="color:var(--accent)"></i>'}
+
+                </div>
+                <h2 style="text-align:center; font-family:var(--font-head); text-transform:uppercase; margin-bottom:10px;">${c.name}</h2>
+                <div style="text-align:center; color:var(--accent); font-size:10px; font-weight:800; margin-bottom:40px;"> ${c.region || 'GLOBAL'}</div>
+                <div style="border-top:1px solid #111; padding-top:20px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px;"><span style="color:var(--gray)">Основатель:</span><b>${c.leader}</b></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px;"><span style="color:var(--gray)">Дисциплина:</span><b>${c.game}</b></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px;"><span style="color:var(--gray)">Минимальный ранг:</span><b>${c.min_rank}</b></div>
+                </div>
+                ${buttonsHtml}
+            </aside>
+            <section>
+                <div data-aos="reveal" data-aos-delay="100">
+                    <h1 class="big-title">Информация о <br> клане</h1>
+                    <p style="font-size:20px; color:#888; border-left:2px solid var(--accent); padding-left:30px; line-height:1.7;">"${c.description || 'Данные засекречены.'}"</p>
+                </div>
+                <div style="margin-top:80px;" data-aos="reveal" data-aos-delay="200">
+                    <span class="info-label">Состав</span>
+                    <div class="roster-grid">${membersHtml}</div>
+                </div>
+            </section>
+        `;
+            } catch (e) {
+                document.getElementById('clan-root').innerHTML = "<h1>CLAN_NOT_FOUND</h1>";
+            }
+        }
+
+        async function joinClan() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || !user.username) { alert('Для вступления в клан необходимо авторизоваться.'); window.location.href = 'auth.html'; return; }
+            try {
+                const res = await fetch(`/api/clans/${clanId}/join`, { method: 'POST' });
+                if (res.ok) { alert('Вы вступили в клан!'); location.reload(); }
+                else { const d = await res.json(); alert(d.error || 'Ошибка'); }
+            } catch (e) { alert('Ошибка соединения'); }
+        }
+
+        async function leaveClan() {
+            if (!confirm('Вы уверены, что хотите покинуть клан?')) return;
+            try {
+                const res = await fetch(`/api/clans/${clanId}/leave`, { method: 'POST' });
+                if (res.ok) { alert('Вы покинули клан.'); location.reload(); }
+                else { const d = await res.json(); alert(d.error || 'Ошибка'); }
+            } catch (e) { alert('Ошибка соединения'); }
+        }
+
+        function openEditModal() {
+            if (!clanData) return;
+            document.getElementById('edit-desc').value = clanData.description || '';
+            document.getElementById('edit-rank').value = clanData.min_rank || '';
+            document.getElementById('edit-region').value = clanData.region || '';
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        async function saveEdit() {
+            const data = {
+                description: document.getElementById('edit-desc').value,
+                min_rank: document.getElementById('edit-rank').value,
+                region: document.getElementById('edit-region').value
+            };
+            try {
+                const res = await fetch(`/api/clans/${clanId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                if (res.ok) { document.getElementById('editModal').style.display = 'none'; location.reload(); }
+                else { alert('Ошибка сохранения'); }
+            } catch (e) { alert('Ошибка соединения'); }
+        }
+
+        load();
+    </script>
+</body>
+
+</html>

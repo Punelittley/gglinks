@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGLINK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="header_footer.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #151515;
+            --accent: #0066ff;
+            --white: #ffffff;
+            --gray: #666666;
+            --danger: #ff3333;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        [data-aos="reveal"] {
+            opacity: 0;
+            filter: blur(20px);
+            transform: scale(1);
+            transition: opacity 1.2s ease, filter 1s ease;
+        }
+
+        [data-aos="reveal"].aos-animate {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        .auth-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .auth-card {
+            width: 500px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 60px;
+            transition: 0.3s ease;
+        }
+
+        .auth-card:hover {
+            border-color: #222;
+        }
+
+        .auth-header h1 {
+            font-family: var(--font-head);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header h1 span {
+            color: var(--accent);
+        }
+
+        .auth-header p {
+            color: var(--gray);
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-family: var(--font-head);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.2);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--gray);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .input-box {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-box:focus {
+            border-color: var(--accent);
+            background: #050505;
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .toggle-text span {
+            color: var(--white);
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .toggle-text span:hover {
+            color: var(--accent);
+        }
+
+        .alert-box {
+            background: rgba(255, 51, 51, 0.05);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 12px;
+            font-size: 11px;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .alert-success {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 12px;
+            font-size: 11px;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .input-box.input-error {
+            border-color: var(--danger) !important;
+            background: rgba(255, 51, 51, 0.05) !important;
+        }
+
+        .field-error {
+            color: var(--danger);
+            font-size: 10px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        #register-form {
+            display: none;
+        }
+
+        .char-counter {
+            font-size: 9px;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .auth-wrap {
+                padding: 40px 16px;
+            }
+
+            .auth-card {
+                width: 100%;
+                max-width: 500px;
+                padding: 35px 25px;
+            }
+
+            .auth-header h1 {
+                font-size: 22px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .auth-card {
+                padding: 25px 18px;
+            }
+
+            .auth-header h1 {
+                font-size: 20px;
+            }
+
+            .input-box {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            .btn-primary {
+                padding: 14px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo">
+                    <img src="assets/logo.svg" alt="GGLINK Logo">
+                </a>
+                <nav class="nav-menu">
+                    <a href="brows.html">Найти тиммейта</a>
+                    <a href="games.html">Библиотека игр</a>
+                    <a href="tournament.html">Турниры</a>
+                    <a href="clans.html">Кланы</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="message.html" class="msg-icon" title="Сообщения" onclick="return checkMsgAuth(event)">
+                        <i class="fas fa-comment-dots"></i>
+                    </a>
+                    <a href="admin.html" class="admin-link" id="admin-link"><i class="fas fa-shield-alt"></i> Админ</a>
+                    <a href="profile.html" class="profile-icon" id="header-profile-icon"></a>
+                    <span id="auth-buttons">
+                        <a href="auth.html"
+                            style="color:var(--gray); text-decoration:none; font-size:12px; font-weight:600; text-transform:uppercase;">Войти</a>
+                        <a href="auth.html" class="btn btn-blue" style="margin-left:10px;">Регистрация</a>
+                    </span>
+                    <button class="burger-btn" id="burger-btn" onclick="toggleMenu()">
+                        <i class="fas fa-bars" id="burger-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="brows.html">Найти тиммейта</a>
+        <a href="games.html">Библиотека игр</a>
+        <a href="tournament.html">Турниры</a>
+        <a href="clans.html">Кланы</a>
+        <a href="message.html">Сообщения</a>
+        <div class="mobile-auth" id="mobile-auth">
+            <a href="auth.html">Войти</a>
+            <a href="auth.html" class="btn btn-blue">Регистрация</a>
+        </div>
+    </div>
+    <div class="auth-wrap">
+        <div class="auth-card" data-aos="reveal">
+            <div id="login-form">
+                <div class="auth-header">
+                    <h1>Добро пожаловать</h1>
+                    <p>Введите данные для доступа к платформе</p>
+                </div>
+                <div class="alert-box" id="login-alert">Ошибка авторизации</div>
+                <div class="input-group">
+                    <label>Электронная почта</label>
+                    <input type="email" id="l-email" class="input-box" placeholder="..." maxlength="255">
+                    <div class="field-error" id="l-email-error"></div>
+                </div>
+                <div class="input-group">
+                    <label>Пароль</label>
+                    <input type="password" id="l-pass" class="input-box" placeholder="..." maxlength="64">
+                    <div class="field-error" id="l-pass-error"></div>
+                </div>
+                <button class="btn-primary" onclick="handleLogin()">Войти в систему</button>
+                <div style="margin: 20px 0; display: flex; align-items: center; gap: 10px;">
+                    <div style="flex:1; height:1px; background: var(--border);"></div>
+                    <span style="font-size: 10px; color: var(--gray);">ИЛИ</span>
+                    <div style="flex:1; height:1px; background: var(--border);"></div>
+                </div>
+                <a href="/auth/steam" style="text-decoration: none;">
+                    <button class="btn-primary"
+                        style="background: #171a21; border: 1px solid #2a475e; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 0;">
+                        <i class="fab fa-steam" style="font-size: 20px;"></i>
+                        Войти через STEAM
+                    </button>
+                </a>
+                <a href="/auth/discord" style="text-decoration: none;">
+                    <button class="btn-primary"
+                        style="background: #5865F2; border: 1px solid #4752C4; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px;">
+                        <i class="fab fa-discord" style="font-size: 20px;"></i>
+                        Войти через DISCORD
+                    </button>
+                </a>
+                <div class="toggle-text">
+                    Нет аккаунта? <span onclick="showForm('reg')">Создать профиль</span>
+                </div>
+            </div>
+            <div id="register-form">
+                <div class="auth-header">
+                    <h1>Присоедениться к <span> GGLINK</span></h1>
+                    <p>Создайте свой игровой идентификатор</p>
+                </div>
+                <div class="alert-box" id="reg-alert">Ошибка регистрации</div>
+                <div class="alert-success" id="reg-success">Профиль создан! Перенаправление...</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Никнейм</label>
+                        <input type="text" id="r-user" class="input-box" placeholder="..." maxlength="10">
+                        <div class="field-error" id="r-user-error"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Discord Tag</label>
+                        <input type="text" id="r-discord" class="input-box" placeholder="..." maxlength="37">
+                        <div class="field-error" id="r-discord-error"></div>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Электронная почта</label>
+                        <input type="email" id="r-email" class="input-box" placeholder="..." maxlength="25">
+                        <div class="field-error" id="r-email-error"></div>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Пароль</label>
+                        <input type="password" id="r-pass" class="input-box" placeholder="..." maxlength="10">
+                        <div class="field-error" id="r-pass-error"></div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="handleRegister()">Зарегистрироваться</button>
+                <div class="toggle-text">
+                    Уже есть аккаунт? <span onclick="showForm('login')">Авторизоваться</span>
+                </div>
+            </div>
+        </div>
+    </div>
+<footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <svg viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 30px;">
+                        <rect x="0" y="5" width="5" height="30" fill="#0066ff" />
+                        <text x="15" y="28" fill="white"
+                            style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-1px;">GGLINK</text>
+                    </svg>
+                </div>
+                <div class="footer-col">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="brows.html">Игроки</a></li>
+                        <li><a href="clans.html">Команды</a></li>
+                        <li><a href="tournament.html">Турниры</a></li>
+                        <li><a href="games.html">Игры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Что мы предлагаем</a></li>
+                        <li><a href="#">Сейчас в поиске</a></li>
+                        <li><a href="#">Партнеры платформы</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('burger-icon');
+            menu.classList.toggle('active');
+            icon.className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) return;
+                const authBtns = document.getElementById('auth-buttons');
+                const profileIcon = document.getElementById('header-profile-icon');
+                const adminLink = document.getElementById('admin-link');
+                const mobileAuth = document.getElementById('mobile-auth');
+                if (authBtns) authBtns.style.display = 'none';
+                if (mobileAuth) mobileAuth.style.display = 'none';
+                if (profileIcon) {
+                    profileIcon.style.display = 'flex';
+                    profileIcon.innerText = user.username[0].toUpperCase();
+                }
+                if (user.isAdmin && adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+                window.location.href = 'index.html';
+            } catch (e) { }
+        }
+        checkAuth();
+        function checkMsgAuth(e) {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) {
+                    if (e) e.preventDefault();
+                    alert('Для доступа к сообщениям необходимо авторизоваться.');
+                    window.location.href = 'auth.html';
+                    return false;
+                }
+                return true;
+            } catch (e) { return false; }
+        }
+        function showForm(mode) {
+            const login = document.getElementById('login-form');
+            const reg = document.getElementById('register-form');
+            document.querySelectorAll('.alert-box, .alert-success').forEach(el => el.style.display = 'none');
+            clearFieldErrors();
+            if (mode === 'reg') { login.style.display = 'none'; reg.style.display = 'block'; }
+            else { reg.style.display = 'none'; login.style.display = 'block'; }
+        }
+        function clearFieldErrors() {
+            document.querySelectorAll('.input-box').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.field-error').forEach(el => el.style.display = 'none');
+        }
+
+        function setFieldError(inputId, msg) {
+            const input = document.getElementById(inputId);
+            if (input) input.classList.add('input-error');
+            let errEl = document.getElementById(inputId + '-error');
+            if (!errEl) {
+                errEl = input?.parentElement?.querySelector('.field-error');
+            }
+            if (!errEl) {
+                errEl = document.createElement('div');
+                errEl.className = 'field-error';
+                input?.parentElement?.appendChild(errEl);
+            }
+            errEl.textContent = msg;
+            errEl.style.display = 'block';
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.com$/;
+
+        async function handleLogin() {
+            clearFieldErrors();
+            const email = document.getElementById('l-email').value.trim();
+            const password = document.getElementById('l-pass').value;
+            let hasError = false;
+
+            // Email validation
+            if (!email) { setFieldError('l-email', 'Введите email'); hasError = true; }
+            else if (email.length > 255) { setFieldError('l-email', 'Максимум 255 символов'); hasError = true; }
+            else if (!emailRegex.test(email)) { setFieldError('l-email', 'Email должен заканчиваться на .com'); hasError = true; }
+
+            // Password validation
+            if (!password) { setFieldError('l-pass', 'Введите пароль'); hasError = true; }
+            else if (password.length < 6) { setFieldError('l-pass', 'Минимум 6 символов'); hasError = true; }
+            else if (password.length > 64) { setFieldError('l-pass', 'Максимум 64 символа'); hasError = true; }
+
+            if (hasError) return;
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: data.username,
+                        email: data.email,
+                        id: data.id,
+                        avatar: data.avatar || null,
+                        isAdmin: data.isAdmin || false
+                    }));
+                    window.location.href = 'index.html';
+                } else {
+                    showAlert('login-alert', data.error || 'Неверный email или пароль');
+                }
+            } catch (e) {
+                showAlert('login-alert', 'Ошибка соединения с сервером');
+            }
+        }
+
+        async function handleRegister() {
+            clearFieldErrors();
+            const username = document.getElementById('r-user').value.trim();
+            const discord_tag = document.getElementById('r-discord').value.trim();
+            const email = document.getElementById('r-email').value.trim();
+            const password = document.getElementById('r-pass').value;
+            let hasError = false;
+
+            // Nickname validation
+            if (!username) { setFieldError('r-user', 'Введите никнейм'); hasError = true; }
+            else if (username.length < 2) { setFieldError('r-user', 'Минимум 2 символа'); hasError = true; }
+            else if (username.length > 10) { setFieldError('r-user', 'Максимум 10 символов'); hasError = true; }
+            else if (!/^[a-zA-Zа-яА-ЯёЁ0-9]+$/.test(username)) { setFieldError('r-user', 'Только буквы и цифры'); hasError = true; }
+
+            // Discord tag validation
+            if (!discord_tag) { setFieldError('r-discord', 'Введите Discord тег'); hasError = true; }
+            else if (discord_tag.length < 2) { setFieldError('r-discord', 'Минимум 2 символа'); hasError = true; }
+            else if (discord_tag.length > 37) { setFieldError('r-discord', 'Максимум 37 символов'); hasError = true; }
+            else if (!/^[a-zA-Z0-9_.]{2,32}(#\d{4})?$/.test(discord_tag)) { setFieldError('r-discord', 'Формат: username или user#1234'); hasError = true; }
+
+            // Email validation
+            if (!email) { setFieldError('r-email', 'Введите email'); hasError = true; }
+            else if (email.length > 25) { setFieldError('r-email', 'Максимум 25 символов'); hasError = true; }
+            else if (!emailRegex.test(email)) { setFieldError('r-email', 'Email должен заканчиваться на .com'); hasError = true; }
+
+            // Password validation
+            if (!password) { setFieldError('r-pass', 'Введите пароль'); hasError = true; }
+            else if (password.length < 6) { setFieldError('r-pass', 'Минимум 6 символов'); hasError = true; }
+            else if (password.length > 10) { setFieldError('r-pass', 'Максимум 10 символов'); hasError = true; }
+            else if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) { setFieldError('r-pass', 'Пароль должен содержать буквы и цифры'); hasError = true; }
+
+            if (hasError) return;
+
+            const payload = { username, email, discord_tag, password };
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const successEl = document.getElementById('reg-success');
+                    successEl.style.display = 'block';
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: payload.username,
+                        email: payload.email,
+                        id: data.id,
+                        isAdmin: false
+                    }));
+                    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+                } else {
+                    showAlert('reg-alert', data.error || 'Ошибка при регистрации');
+                }
+            } catch (e) {
+                showAlert('reg-alert', 'Ошибка соединения с сервером');
+            }
+        }
+
+        function showAlert(id, text) {
+            const el = document.getElementById(id);
+            el.innerText = text;
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

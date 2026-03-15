@@ -1,0 +1,108 @@
+:root {
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --border: #151515;
+    --accent: #0066ff;
+    --white: #ffffff;
+    --gray: #666666;
+    --font-head: 'Space Grotesk', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1400px ;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+[data-aos="reveal"] {
+    opacity: 0;
+    filter: blur(25px);
+    transform: scale(1);
+    transition: opacity 1s ease, filter 1s ease;
+}
+
+[data-aos="reveal"].aos-animate {
+    opacity: 1;
+    filter: blur(0);
+}
+
+
+
+
+.hero {
+    padding: 100px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.hero h1 {
+    font-family: var(--font-head);
+    font-size: 80px;
+    text-transform: uppercase;
+    letter-spacing: -4px;
+    line-height: 0.8;
+}
+
+.btn-create-trigger {
+    padding: 20px 40px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    font-family: var(--font-head);
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-create-trigger:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
+}
+
+.clan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    padding-bottom: 100px;
+}
+
+.clan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    transition: 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.clan-card:hover {
+    border-color: var(--accent);
+    background: #080808;
+}
+
+.clan-name {
+    font-family: var(--font-head);
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+}

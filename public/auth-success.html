@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="styles/auth-success.css">
+<html><head><meta charset="UTF-8"></head>
+<body>
+<script>
+  const params = new URLSearchParams(location.search);
+  const userStr = params.get('user');
+  if (userStr) {
+    try {
+      const user = JSON.parse(decodeURIComponent(userStr));
+      if (!user.username) {
+        user.username = user.name || user.displayName || user.personaname || 'User';
+      }
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    } catch(e) {
+      console.error('Parse error:', e);
+    }
+  }
+  window.location.href = '/profile.html';
+</script>
+</body>
+</html>

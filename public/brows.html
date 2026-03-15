@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGLINK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="header_footer.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #151515;
+            --accent: #0066ff;
+            --white: #ffffff;
+            --gray: #666666;
+            --font-head: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: #fff;
+            letter-spacing: -0.2px;
+        }
+
+        [data-aos="reveal"] {
+            opacity: 0;
+            filter: blur(20px);
+            transform: scale(0.99);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        [data-aos="reveal"].aos-animate {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1);
+        }
+
+        .filters-wrap {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            background: #020202;
+        }
+
+        .f-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .f-group label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 16px;
+            font-family: var(--font-head);
+            font-size: 12px;
+            text-transform: uppercase;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        select:hover,
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.1);
+        }
+
+        .lobby-list {
+            padding: 60px 0;
+        }
+
+        .player-strip {
+            display: grid;
+            grid-template-columns: 80px 2fr 1.5fr 1fr 150px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+            padding: 20px 40px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .player-strip:hover {
+            border-color: var(--accent);
+            background: #080808;
+        }
+
+        .player-strip::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--accent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .player-strip:hover::before {
+            opacity: 1;
+        }
+
+        .p-avatar {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        .p-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .p-nick {
+            font-family: var(--font-head);
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .p-game {
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .p-extra {
+            font-size: 10px;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        .p-rank-box {
+            text-align: center;
+        }
+
+        .mobile-admin-link {
+            display: none !important;
+            color: #ff3333 !important;
+            border: 1px solid #ff3333;
+            padding: 10px 30px;
+            font-size: 14px !important;
+        }
+
+        .mobile-admin-link.visible {
+            display: inline-block !important;
+        }
+
+        .p-rank-label {
+            font-size: 9px;
+            color: var(--gray);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .p-rank-val {
+            font-family: var(--font-head);
+            font-size: 18px;
+            color: var(--white);
+        }
+
+        .p-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            color: #00ff88;
+            text-transform: uppercase;
+        }
+
+        .pulse {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .btn-view {
+            padding: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            font-family: var(--font-head);
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-view:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 1024px) {
+            .f-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .player-strip {
+                grid-template-columns: 60px 2fr 1fr 120px;
+            }
+
+            .p-status {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .f-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-wrap {
+                padding: 25px 0;
+            }
+
+            .player-strip {
+                grid-template-columns: 50px 1fr;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+
+            .p-rank-box,
+            .p-status,
+            .btn-view {
+                display: none;
+            }
+
+            .p-nick {
+                font-size: 16px;
+            }
+
+            .lobby-list {
+                padding: 30px 0;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .player-strip {
+                grid-template-columns: 40px 1fr;
+                padding: 12px 16px;
+            }
+
+            .p-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .p-nick {
+                font-size: 14px;
+            }
+
+            .p-game {
+                font-size: 10px;
+            }
+
+            select,
+            input {
+                padding: 12px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo"><img src="assets/logo.svg" alt="GGLINK Logo"></a>
+                <nav class="nav-menu">
+                    <a href="brows.html">Найти тиммейта</a>
+                    <a href="games.html">Библиотека игр</a>
+                    <a href="tournament.html">Турниры</a>
+                    <a href="clans.html">Кланы</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="message.html" class="msg-icon" title="Сообщения" onclick="return checkMsgAuth(event)"><i
+                            class="fas fa-comment-dots"></i></a>
+                    <a href="admin.html" class="admin-link" id="admin-link"><i class="fas fa-shield-alt"></i> Админ</a>
+                    <a href="profile.html" class="profile-icon" id="header-profile-icon"></a>
+                    <span id="auth-buttons">
+                        <a href="auth.html"
+                            style="color:var(--gray); text-decoration:none; font-size:12px; font-weight:600; text-transform:uppercase;">Войти</a>
+                        <a href="auth.html" class="btn btn-blue" style="margin-left:10px;">Регистрация</a>
+                    </span>
+                    <button class="burger-btn" id="burger-btn" onclick="toggleMenu()"><i class="fas fa-bars"
+                            id="burger-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="brows.html">Найти тиммейта</a>
+        <a href="games.html">Библиотека игр</a>
+        <a href="tournament.html">Турниры</a>
+        <a href="clans.html">Кланы</a>
+        <a href="message.html">Сообщения</a>
+        <a href="admin.html" class="mobile-admin-link" id="mobile-admin-link"><i class="fas fa-shield-alt"></i>
+            Админ</a>
+        <div class="mobile-auth" id="mobile-auth">
+            <a href="auth.html">Войти</a>
+            <a href="auth.html" class="btn btn-blue">Регистрация</a>
+        </div>
+    </div>
+    <section class="filters-wrap">
+        <div class="container f-grid">
+            <div class="f-group"><label>Дисциплина</label><select id="game">
+                    <option>Все игры</option>
+                    <option>Valorant</option>
+                    <option>CS2</option>
+                    <option>Dota 2</option>
+                </select></div>
+            <div class="f-group"><label>Поиск пользователя</label><input type="text" id="search-input"
+                    placeholder="Введите ID или Ник игрока"></div>
+            <div class="f-group"><label>Платформа</label><select>
+                    <option>Кросс-платформа</option>
+                    <option>ПК</option>
+                </select></div>
+            <button onclick="load()"
+                style="background:var(--accent); border:none; color:white; padding:16px 30px; font-family:var(--font-head); font-weight:700; cursor:pointer;">Поиск</button>
+        </div>
+    </section>
+    <main class="container lobby-list" id="list"></main>
+<footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <svg viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 30px;">
+                        <rect x="0" y="5" width="5" height="30" fill="#0066ff" />
+                        <text x="15" y="28" fill="white"
+                            style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-1px;">GGLINK</text>
+                    </svg>
+                </div>
+                <div class="footer-col">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="brows.html">Игроки</a></li>
+                        <li><a href="clans.html">Команды</a></li>
+                        <li><a href="tournament.html">Турниры</a></li>
+                        <li><a href="games.html">Игры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Что мы предлагаем</a></li>
+                        <li><a href="#">Сейчас в поиске</a></li>
+                        <li><a href="#">Партнеры платформы</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('burger-icon');
+            menu.classList.toggle('active');
+            icon.className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        }
+        function checkAuth() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) return;
+                document.getElementById('auth-buttons').style.display = 'none';
+                const ma = document.getElementById('mobile-auth'); if (ma) ma.style.display = 'none';
+                const icon = document.getElementById('header-profile-icon');
+                icon.style.display = 'flex';
+                icon.innerText = user.username[0].toUpperCase();
+                if (user.isAdmin) {
+                    const al = document.getElementById('admin-link'); if (al) al.style.display = 'inline-block';
+                    const mal = document.getElementById('mobile-admin-link'); if (mal) mal.classList.add('visible');
+                }
+            } catch (e) { }
+        }
+        checkAuth();
+        function checkMsgAuth(e) {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || !user.username) { if (e) e.preventDefault(); alert('Для доступа к сообщениям необходимо авторизоваться.'); window.location.href = 'auth.html'; return false; }
+                return true;
+            } catch (e) { return false; }
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameFilter = urlParams.get('game');
+        async function load() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            let url = '/api/players';
+            if (currentUser && currentUser.id) { url += '?exclude=' + currentUser.id; }
+            const res = await fetch(url);
+            let data = await res.json();
+            const gameSelect = document.getElementById('game');
+            const selectedGame = gameSelect ? gameSelect.value : null;
+            if (selectedGame && selectedGame !== 'Все игры') {
+                data = data.filter(p => p.game && p.game.toLowerCase() === selectedGame.toLowerCase());
+            } else if (gameFilter) {
+                data = data.filter(p => p.game && p.game.toLowerCase() === gameFilter.toLowerCase());
+            }
+            const searchVal = document.getElementById('search-input').value.trim().toLowerCase();
+            if (searchVal) { data = data.filter(p => p.nickname && p.nickname.toLowerCase().includes(searchVal)); }
+            const seen = new Set();
+            data = data.filter(p => { if (seen.has(p.nickname)) return false; seen.add(p.nickname); return true; });
+            document.getElementById('list').innerHTML = data.map(p => {
+                let extras = [];
+                if (p.country) extras.push(p.country);
+                if (p.age) extras.push(p.age + ' лет');
+                if (p.languages) extras.push(p.languages);
+                if (p.has_mic) extras.push('Микрофон');
+                if (p.looking_for_team) extras.push('Ищет команду');
+                const extraLine = extras.length > 0 ? `<div class="p-extra">${extras.join(' • ')}</div>` : '';
+                return `
+                <div class="player-strip" data-aos="reveal" onclick="window.location.href='browsplayer.html?id=${p.id}'">
+                    <div class="p-avatar">${p.user_avatar ? '<img src="' + p.user_avatar + '">' : '<i class="fas fa-user"></i>'}</div>
+                    <div>
+                        <div class="p-nick">${p.nickname}</div>
+                        <div class="p-game">${p.game || '—'} // ${p.role || '—'}</div>
+                        ${extraLine}
+                    </div>
+                    <div class="p-rank-box">
+                        <div class="p-rank-label">Ранг</div>
+                        <div class="p-rank-val">${p.rank || '—'}</div>
+                    </div>
+                    <div class="p-status"><div class="pulse"></div> Online</div>
+                    <a href="browsplayer.html?id=${p.id}" class="btn-view">Профиль</a>
+                </div>
+            `}).join('');
+        }
+        load();
+    </script>
+</body>
+
+</html>
